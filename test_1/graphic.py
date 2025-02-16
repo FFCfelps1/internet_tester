@@ -64,7 +64,7 @@ root.geometry("400x300")
 root.resizable(True, True)
 
 # Carregando a imagem de fundo
-background_image = Image.open("src/background.jpg")
+background_image = Image.open("background.jpg")
 background_photo = ImageTk.PhotoImage(background_image)
 
 # Criando um Canvas para a imagem de fundo
