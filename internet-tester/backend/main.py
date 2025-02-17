@@ -1,10 +1,20 @@
 from fastapi import FastAPI
 import speedtest
+from fastapi.middleware.cors import CORSMiddleware
 import subprocess
-import statistics
 import re
+import statistics
 
 app = FastAPI()
+
+# Configuração do CORS
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:3000"],  # Pode restringir para ["http://localhost:3000"] se necessário
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 def calcular_jitter_perda(host="8.8.8.8", num_pings=10):
     try:
@@ -25,7 +35,13 @@ def calcular_jitter_perda(host="8.8.8.8", num_pings=10):
         return 0, 0
 
 @app.get("/testar_internet")
-def testar_internet():
+async def testar_internet():
+    """Simples mensagem para testar conexão"""
+    return {"message": "Teste de conexão bem-sucedido!"}
+
+@app.get("/medir_internet")
+async def medir_internet():
+    """Executa o teste de velocidade de internet"""
     st = speedtest.Speedtest()
     st.get_best_server()
 
@@ -41,4 +57,3 @@ def testar_internet():
         "jitter": round(jitter, 2),
         "perda_pacotes": round(perda, 2)
     }
-
